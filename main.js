@@ -9,21 +9,31 @@ class DigitalClock {
          }, 500)
      }
     update(){
-      const parts = this.getTimeParts();
+      const parts = this.getClockParts();
       const minuteFormated = parts.minute.toString().padStart(2, "0")
-      const timeFormatted = `${parts.hour}:${minuteFormated}`
-      const amPm = parts.isAm ? "AM" : "PM";
+      const secondsFormated = parts.seconds.toString().padStart(2, "0")
+      const timeFormatted = `${parts.hour}:${minuteFormated}:${secondsFormated}`
+      const amPm = parts.isAm ? "AM" : "PM"
+      const dayFormatted = parts.dd.toString().padStart(2,"0")
+      const monthFormatted = (parts.mm).toString().padStart(2, "0")
+      const dateFormatted = `${monthFormatted} ${dayFormatted}, ${parts.yyyy}`
       
       this.element.querySelector(".clock-time").textContent = timeFormatted;
       this.element.querySelector(".clock-ampm").textContent = amPm;
+      this.element.querySelector(".date").textContent =  dateFormatted;
     }
 
-    getTimeParts(){
+    getClockParts(){
         const now = new Date();
+        const months = new Array('January','Feburary','March','April','May','June','July','August','September','October','November','December')
         return{
             hour: now.getHours() % 12 || 12,
             minute: now.getMinutes(),
-            isAm: now.getHours() < 12
+            seconds: now.getSeconds(),
+            isAm: now.getHours() < 12,
+            dd: now.getDate(),
+            mm: months[now.getMonth()],
+            yyyy: now.getFullYear()
         }
     }
 }
